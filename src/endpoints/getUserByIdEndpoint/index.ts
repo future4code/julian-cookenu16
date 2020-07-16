@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 
 import { Authenticator } from '../../service/Authenticator';
 import { UserDatabase } from '../../data/UserDatabase';
-import { Database } from '../../data/Database';
 
 export const getUserByIdEndpoint = async (req:Request, res:Response):Promise<any> => {
   try {
@@ -19,6 +18,4 @@ export const getUserByIdEndpoint = async (req:Request, res:Response):Promise<any
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
-
-  await Database.destroyConnection();
 }

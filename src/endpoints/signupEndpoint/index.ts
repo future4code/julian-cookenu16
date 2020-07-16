@@ -4,7 +4,6 @@ import { IdGenerator } from '../../service/IdGenerator';
 import { HashManager } from '../../service/HashManager';
 import { UserDatabase } from '../../data/UserDatabase';
 import { Authenticator } from '../../service/Authenticator';
-import { Database } from '../../data/Database';
 
 export const signupEndpoint = async (req:Request, res:Response) => {
   try {
@@ -34,6 +33,4 @@ export const signupEndpoint = async (req:Request, res:Response) => {
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
-
-  await Database.destroyConnection();
 }

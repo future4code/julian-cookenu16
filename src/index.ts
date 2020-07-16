@@ -6,6 +6,9 @@ import { loginEndpoint } from "./endpoints/loginEndpoint";
 import { getProfileEndpoint } from "./endpoints/getProfileEndpoint";
 import { getUserByIdEndpoint } from "./endpoints/getUserByIdEndpoint";
 import { createRecipeEndpoint } from "./endpoints/createRecipeEndpoint";
+import { getRecipeEndpoint } from "./endpoints/getRecipeByIdEndpoint";
+import { followUserEndpoint } from "./endpoints/followUserEndpoint";
+import { unfollowUserEndpoint } from "./endpoints/unfollowUserEndpoint";
 
 const app = express();
 
@@ -29,3 +32,9 @@ app.get('/user/profile', getProfileEndpoint);
 app.get('/user/:id', getUserByIdEndpoint);
 
 app.post('/recipe', createRecipeEndpoint);
+
+app.get('/recipe/:id', getRecipeEndpoint);
+
+app.post('/user/follow', followUserEndpoint);
+
+app.post('/user/unfollow', unfollowUserEndpoint);
