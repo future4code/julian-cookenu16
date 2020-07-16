@@ -7,7 +7,7 @@ export class UserDatabase extends Database {
 
   private static TABLE_NAME:string = process.env.TB_USER as string;
 
-  public createUser = async (id:string, name:string, email:string, password:string):Promise<void> => {
+  public create = async (id:string, name:string, email:string, password:string):Promise<void> => {
     try {
       await this.getConnection()
       .insert({ id, name, email, password })
@@ -17,7 +17,7 @@ export class UserDatabase extends Database {
     }
   }
 
-  public getUserByEmail = async (email:string):Promise<any> => {
+  public getByEmail = async (email:string):Promise<any> => {
     try {
       const result = await this.getConnection()
       .select('*')
@@ -29,7 +29,7 @@ export class UserDatabase extends Database {
     }
   }
 
-  public getUserById = async (id:string):Promise<any> => {
+  public getById = async (id:string):Promise<any> => {
     try {
       const result = await this.getConnection()
       .select('*')
@@ -41,7 +41,7 @@ export class UserDatabase extends Database {
     }
   }
 
-  public deleteUserById = async (id:string):Promise<void> => {
+  public deleteById = async (id:string):Promise<void> => {
     try {
       await this.getConnection()
       .select('*')
