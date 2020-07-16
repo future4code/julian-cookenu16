@@ -4,7 +4,6 @@ import moment from 'moment';
 import { Authenticator } from '../../service/Authenticator';
 import { IdGenerator } from '../../service/IdGenerator';
 import { RecipeDatabase } from '../../data/RecipeDatabase';
-import { Database } from '../../data/Database';
 
 export const createRecipeEndpoint = async (req:Request, res:Response) => {
   try {
@@ -26,12 +25,10 @@ export const createRecipeEndpoint = async (req:Request, res:Response) => {
     const createdAt = moment().format("YYYY-MM-DD hh:mm:ss");
 
     const recipeDb = new RecipeDatabase();
-    await recipeDb.create(id, title, description, createdAt , authData.id);
+    await recipeDb.create(id, title, description, createdAt, authData.id);
 
     res.status(200).send({ message: 'Success' });
   } catch (error) {
     res.status(400).send({ message: error.message });
   }
-
-  await Database.destroyConnection();
 }
