@@ -3,6 +3,8 @@ import { Request, Response } from 'express';
 import { Authenticator } from '../../service/Authenticator';
 import { UserDatabase } from '../../data/UserDatabase';
 
+import { NotFoundError } from '../../errors/NotFoundError';
+
 export const getUserByIdEndpoint = async (req:Request, res:Response):Promise<any> => {
   try {
     const token = req.headers.authorization as string;
@@ -12,10 +14,13 @@ export const getUserByIdEndpoint = async (req:Request, res:Response):Promise<any
 
     const userDb = new UserDatabase();
     const user = await userDb.getById(req.params.id as string);
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
     const { id, name, email } = user;
 
     res.status(200).send({ id, name, email });
   } catch (error) {
-    res.status(400).send({ message: error.message });
+    res.status(error.statusCode || 400).send({ message: error.message });
   }
 }

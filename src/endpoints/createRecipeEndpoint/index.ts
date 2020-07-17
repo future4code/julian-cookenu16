@@ -5,6 +5,8 @@ import { Authenticator } from '../../service/Authenticator';
 import { IdGenerator } from '../../service/IdGenerator';
 import { RecipeDatabase } from '../../data/RecipeDatabase';
 
+import { InvalidInputError } from '../../errors/InvalidInputError';
+
 export const createRecipeEndpoint = async (req:Request, res:Response) => {
   try {
     const token = req.headers.authorization as string;
@@ -14,10 +16,10 @@ export const createRecipeEndpoint = async (req:Request, res:Response) => {
 
     const { title, description } = req.body;
     if (!title) {
-      throw new Error('Insert a tile for the recipe');
+      throw new InvalidInputError('Insert a tile for the recipe');
     }
     if (!description) {
-      throw new Error('Insert a description for the recipe');
+      throw new InvalidInputError('Insert a description for the recipe');
     }
     const idGenerator = new IdGenerator();
     const id = idGenerator.generateId();
@@ -29,6 +31,6 @@ export const createRecipeEndpoint = async (req:Request, res:Response) => {
 
     res.status(200).send({ message: 'Success' });
   } catch (error) {
-    res.status(400).send({ message: error.message });
+    res.status(error.statusCode || 400).send({ message: error.message });
   }
 }

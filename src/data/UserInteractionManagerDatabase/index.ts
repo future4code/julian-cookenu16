@@ -17,6 +17,21 @@ export class UserInteractionManagerDatabase extends Database {
     await Database.destroyConnection();
   }
 
+  public checkUserIsFollowed = async (idFollower:string, idToUnfollow:string):Promise<boolean> => {
+    const follower_user_id = idFollower;
+    const to_follow_user_id = idToUnfollow;
+    const countMatchs = await this.getConnection()
+    .count()
+    .from(UserInteractionManagerDatabase.TABLE_NAME)
+    .where({ follower_user_id, to_follow_user_id });
+
+    await Database.destroyConnection();
+    if (countMatchs) {
+      return true;
+    }
+    return false;
+  }
+
   public unfollowUser = async (idFollower:string, idToUnfollow:string):Promise<void> => {
     const follower_user_id = idFollower;
     const to_follow_user_id = idToUnfollow;
