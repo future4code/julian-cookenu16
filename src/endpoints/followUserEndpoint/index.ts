@@ -4,6 +4,8 @@ import { Authenticator } from '../../service/Authenticator';
 import { UserDatabase } from '../../data/UserDatabase';
 import { UserInteractionManagerDatabase } from '../../data/UserInteractionManagerDatabase';
 
+import { NotFoundError } from '../../errors/NotFoundError';
+
 export const followUserEndpoint = async (req:Request, res:Response) => {
   try {
     const token = req.headers.authorization as string;
@@ -13,10 +15,10 @@ export const followUserEndpoint = async (req:Request, res:Response) => {
 
     const userDb = new UserDatabase();
     const idToFollow = req.body.userToFollowId as string;
-    const userToFollow = userDb.getById(idToFollow);
+    const userToFollow = await userDb.getById(idToFollow);
 
     if (!userToFollow) {
-      throw new Error('Insert a valid user to follow');
+      throw new NotFoundError('Insert a valid user to follow');
     }
 
     const userInteractionManagerDb = new UserInteractionManagerDatabase();
@@ -24,6 +26,6 @@ export const followUserEndpoint = async (req:Request, res:Response) => {
 
     res.status(200).send({ message: "Followed successfully" });
   } catch (error) {
-    res.status(400).send({ message: error.message });
+    res.status(error.statusCode || 400).send({ message: error.message });
   }
 }

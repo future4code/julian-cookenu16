@@ -4,14 +4,16 @@ import { HashManager } from '../../service/HashManager';
 import { UserDatabase } from '../../data/UserDatabase';
 import { Authenticator } from '../../service/Authenticator';
 
+import { InvalidInputError } from '../../errors/InvalidInputError';
+
 export const loginEndpoint = async (req:Request, res:Response) => {
   try {
     const { email, password } = req.body;
     if (!email || email.indexOf('@') === -1) {
-      throw new Error('Insert a valid email');
+      throw new InvalidInputError('Insert a valid email');
     }
     if (!password) {
-      throw new Error('Insert a password');
+      throw new InvalidInputError('Insert a password');
     }
     const userDb = new UserDatabase();
     const user = await userDb.getByEmail(email);
@@ -28,6 +30,6 @@ export const loginEndpoint = async (req:Request, res:Response) => {
 
     res.status(200).send({ token });
   } catch (error) {
-    res.status(400).send({ message: error.message });
+    res.status(error.statusCode || 400).send({ message: error.message });
   }
 }
