@@ -26,4 +26,18 @@ export class RecipeDatabase extends Database {
     await Database.destroyConnection();
     return result[0];
   }
+
+  public getByIdArray = async (ids:string[]):Promise<any> => {
+    const creatorIds = ids.map((item:any) => item.userId);
+    const result = await this.getConnection()
+    .select('*')
+    .from(RecipeDatabase.TABLE_NAME)
+    .where((builder) => {
+      builder.whereIn('creator_user_id', creatorIds);
+    })
+    .orderBy('created_at', 'DESC');
+    console.log(result)
+    await Database.destroyConnection();
+    return result;
+  }
 }
