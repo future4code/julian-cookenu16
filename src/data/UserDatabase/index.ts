@@ -1,5 +1,6 @@
-import { Database } from "../Database";
 import dotenv from "dotenv";
+import { Database } from "../Database";
+import { ROLES } from "../../service/Authenticator";
 
 dotenv.config();
 
@@ -7,12 +8,12 @@ export class UserDatabase extends Database {
 
   private static TABLE_NAME:string = process.env.TB_USER as string;
 
-  public create = async (id:string, name:string, email:string, password:string):Promise<void> => {
-    await this.getConnection()
-    .insert({ id, name, email, password })
-    .into(UserDatabase.TABLE_NAME);
+  public static getTableName = ():string => UserDatabase.TABLE_NAME;
 
-    await Database.destroyConnection();
+  public create = async (id:string, name:string, email:string, password:string, role:ROLES):Promise<void> => {
+    await this.getConnection()
+    .insert({ id, name, email, password, role })
+    .into(UserDatabase.TABLE_NAME);
   }
 
   public getByEmail = async (email:string):Promise<any> => {
@@ -20,8 +21,6 @@ export class UserDatabase extends Database {
     .select('*')
     .from(UserDatabase.TABLE_NAME)
     .where({ email });
-
-    await Database.destroyConnection();
     return result[0];
   }
 
@@ -30,9 +29,14 @@ export class UserDatabase extends Database {
     .select('*')
     .from(UserDatabase.TABLE_NAME)
     .where({ id });
-
-    await Database.destroyConnection();
     return result[0];
+  }
+
+  public changeRoleById = async (id:string, role:ROLES):Promise<void> => {
+    await this.getConnection()
+    .from(UserDatabase.TABLE_NAME)
+    .update({ role })
+    .where({ id });
   }
 
   public deleteById = async (id:string):Promise<void> => {
@@ -41,7 +45,5 @@ export class UserDatabase extends Database {
     .from(UserDatabase.TABLE_NAME)
     .delete()
     .where({ id });
-
-    await Database.destroyConnection();
   }
 }
