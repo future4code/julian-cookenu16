@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { Authenticator } from '../../service/Authenticator';
 import { UserDatabase } from '../../data/UserDatabase';
 import { UserInteractionManagerDatabase } from '../../data/UserInteractionManagerDatabase';
+import { Database } from '../../data/Database';
 
 import { NotFoundError } from '../../errors/NotFoundError';
 
@@ -28,4 +29,6 @@ export const followUserEndpoint = async (req:Request, res:Response) => {
   } catch (error) {
     res.status(error.statusCode || 400).send({ message: error.message });
   }
+
+  await Database.destroyConnection();
 }

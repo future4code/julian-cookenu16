@@ -10,6 +10,10 @@ import { getRecipeEndpoint } from "./endpoints/getRecipeByIdEndpoint";
 import { followUserEndpoint } from "./endpoints/followUserEndpoint";
 import { unfollowUserEndpoint } from "./endpoints/unfollowUserEndpoint";
 import { getFeedEndpoint } from './endpoints/getFeedEndpoint';
+import { getRefreshTokenEndpoint } from "./endpoints/getRefreshTokenEndpoint";
+import { editRecipeByIdEndpoint } from "./endpoints/editRecipeByIdEndpoint";
+import { deleteRecipeByIdEndpoint } from "./endpoints/deleteRecipeByIdEndpoint";
+import { deleteUserByIdEndpoint } from "./endpoints/deleteUserByIdEndpoint";
 
 const app = express();
 
@@ -41,3 +45,11 @@ app.get('/recipe/:id', getRecipeEndpoint);
 app.post('/user/follow', followUserEndpoint);
 
 app.post('/user/unfollow', unfollowUserEndpoint);
+
+app.get('/token', getRefreshTokenEndpoint);
+
+app.post('/recipe/:id', editRecipeByIdEndpoint);
+
+app.delete('/recipe/:id', deleteRecipeByIdEndpoint);
+
+app.delete('/user/:id', deleteUserByIdEndpoint);

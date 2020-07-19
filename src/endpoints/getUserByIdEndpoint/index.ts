@@ -2,10 +2,11 @@ import { Request, Response } from 'express';
 
 import { Authenticator } from '../../service/Authenticator';
 import { UserDatabase } from '../../data/UserDatabase';
+import { Database } from '../../data/Database';
 
 import { NotFoundError } from '../../errors/NotFoundError';
 
-export const getUserByIdEndpoint = async (req:Request, res:Response):Promise<any> => {
+export const getUserByIdEndpoint = async (req:Request, res:Response) => {
   try {
     const token = req.headers.authorization as string;
 
@@ -23,4 +24,6 @@ export const getUserByIdEndpoint = async (req:Request, res:Response):Promise<any
   } catch (error) {
     res.status(error.statusCode || 400).send({ message: error.message });
   }
+
+  await Database.destroyConnection();
 }

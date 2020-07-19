@@ -5,13 +5,18 @@ dotenv.config();
 
 interface AuthenticationData {
   id:string;
+  role?:ROLES;
+  device?:string;
+}
+
+export enum ROLES {
+  NORMAL = "NORMAL",
+  ADMIN = "ADMIN"
 }
 
 export class Authenticator {
-  private static EXPIRES_IN = '1min';
-
-  public generateToken = (input:AuthenticationData):string => {
-    const token = jwt.sign(input, process.env.JWT_KEY as string, { expiresIn: Authenticator.EXPIRES_IN });
+  public generateToken = (input:AuthenticationData, expiresIn:string):string => {
+    const token = jwt.sign(input, process.env.JWT_KEY as string, { expiresIn });
     return token;
   }
 
